@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">GeoSandbox</string>
     <string name="hello">Hello, world !</string>
+    <string name="marker_title">Marseille</string>
+    <string name="marker_text">Commune du Sud-Est de la France, chef-lieu du département des Bouches-du-Rhône et de la région Provence-Alpes-Côte d\'Azur.</string>
 </resources>

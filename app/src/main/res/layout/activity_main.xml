@@ -10,10 +10,16 @@
     tools:context="fr.nbrignol.geosandbox.MainActivity">
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello" />
 
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

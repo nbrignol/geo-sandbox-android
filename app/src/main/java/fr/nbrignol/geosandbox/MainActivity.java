@@ -5,17 +5,25 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+
+    GoogleMap theMap = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +33,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Log.d("POSITION", "Start");
         handleAccessPermissions(true);
 
-        //LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     public void handleAccessPermissions(boolean requestPermissionsIfNeeded) {
@@ -91,6 +98,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         TextView label = (TextView) findViewById(R.id.label);
         label.setText(message);
+
+
+        if (theMap != null) {
+            LatLng myPos = new LatLng( location.getLatitude(), location.getLongitude() );
+            theMap.moveCamera( CameraUpdateFactory.newLatLngZoom(myPos, 10) );
+            theMap.addMarker(new MarkerOptions()
+                    .title("Me")
+                    .snippet("Myself")
+                    .position(myPos));
+        }
     }
 
     @Override
@@ -106,6 +123,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String provider) {
         Log.d("POSITION", "Provider disabled " + provider);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        Log.d("POSITION", "MAP is ready.");
+        LatLng target = new LatLng(43.31, 5.365);
+
+        map.moveCamera( CameraUpdateFactory.newLatLngZoom(target, 10) );
+
+        map.addMarker(new MarkerOptions()
+                .title( this.getResources().getString( R.string.marker_title ) )
+                .snippet( this.getResources().getString( R.string.marker_text ) )
+                .position(target));
+
+        theMap = map;
     }
 
 }
